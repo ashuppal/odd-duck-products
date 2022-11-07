@@ -35,4 +35,5 @@
     "semi": [2, "always"],
     "eol-last": "error"
   }
+
 }
