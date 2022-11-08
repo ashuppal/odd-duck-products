@@ -12,7 +12,14 @@ let imgTwo = document.getElementById('img-two');
 let imgThree = document.getElementById('img-three');
 
 let resultBtn = document.getElementById('show-result-btn');
+
 let resultContainer = document.getElementById('result-container');
+
+//Canvas DOM reference
+let chartContext = document.getElementById('my-chart').getContext('2d');
+
+//Chart on
+
 
 
 //Helper/ Utility Functions
@@ -51,15 +58,41 @@ function renderImages(){
 function handleShowResult(event){
 
   if(voteCount === 0){
-    for(let i =0; i<productArray.length;i++){
-      let liElem = document.createElement('li');
-      liElem.textContent = `${productArray[i].name} was viewd: ${productArray[i].views} time(s) and clicked: ${productArray[i].click}`;
-      resultContainer.appendChild(liElem);
-    }
-    resultBtn.removeEventListener('click',handleShowResult);
-  }
+
+    let productName = [];
+    let productViews = [];
+    let productClicks = [];
+
+for(let i=0; i<productArray.length;i++){
+  productName.push(productArray[i].name);
+  productViews.push(productArray[i].views);
+  productClicks.push(productArray[i].click);
 
 }
+    let chartConfig = {
+      type: 'bar',
+      data: {
+        labels: productName,
+        datasets: [{
+          label: "# of views",
+          data: productViews,
+          backgroundColor: 'red',
+        },{
+          label: "# of clicks",
+          data: productClicks,
+          backgroundColor: 'blue',
+
+        }],
+       
+    
+    },
+      options: {},
+    };
+    let myChart = new Chart(chartContext, chartConfig);
+    resultBtn.removeEventListener('click',handleShowResult);
+    }
+   
+  }
 
 function handleImageClick(event){
 
@@ -75,6 +108,7 @@ function handleImageClick(event){
   
   if(voteCount === 0){
     imageContainer.removeEventListener('click', handleImageClick);
+   
   }
 }
 
@@ -111,5 +145,11 @@ productArray.push(sweep,bag,banana,bathroom,boots,breakfast,bubblegum,chair,cthu
 
 renderImages();
 
+
+
 imageContainer.addEventListener('click',handleImageClick);
 resultBtn.addEventListener('click', handleShowResult);
+
+
+
+
