@@ -64,7 +64,6 @@ img {
   color: #fff;
   background-color: #111;
   position:relative;
-  /* z-index: 0; */
   margin: 30px auto 30px;
   height: 30px;
 }
