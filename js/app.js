@@ -17,7 +17,6 @@ let resultContainer = document.getElementById('result-container');
 
 //Helper/ Utility Functions
 
-
 function randomDuck(){
   return Math.floor(Math.random() * productArray.length);
 }
