@@ -122,6 +122,14 @@ function handleImageClick(event){
   
   if(voteCount === 0){
     imageContainer.removeEventListener('click', handleImageClick);
+
+    //Local storage starts here
+    //step 1
+
+    let stringifiedDucks = JSON.stringify(productArray);
+
+    //step 2
+    localStorage.setItem('myProduct', stringifiedDucks);
    
   }
 }
@@ -134,6 +142,18 @@ function Product(name,fileExt = 'jpg'){
   this.click = 0;
   this.views = 0;
 }
+
+//step 3 - pull data out of Local storage
+
+let retrievedDucks = localStorage.getItem('myProduct');
+
+console.log(`retrievedDucks =>>>` , retrievedDucks);
+
+//step 4 - parse data into code 
+
+let parsedDucks = JSON.parse(retrievedDucks);
+
+console.log(`parsedDucks =>> `, parsedDucks);
 
 let sweep = new Product('sweep', 'png');
 let bag = new Product('bag');
