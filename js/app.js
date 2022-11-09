@@ -48,6 +48,7 @@ function renderImages(){
     }
   }
 
+  
   let imgOneRandom = indexArray.shift();
   let imgTwoRandom = indexArray.shift();
   let imgThreeRandom = indexArray.shift();
