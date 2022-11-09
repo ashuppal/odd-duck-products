@@ -24,20 +24,33 @@ let chartContext = document.getElementById('my-chart').getContext('2d');
 
 //Helper/ Utility Functions
 
+let indexArray = [];
+
 function randomDuck(){
   return Math.floor(Math.random() * productArray.length);
 }
 
 function renderImages(){
-  let imgOneRandom = randomDuck();
-  let imgTwoRandom = randomDuck();
-  let imgThreeRandom = randomDuck();
+  // let imgOneRandom = randomDuck();
+  // let imgTwoRandom = randomDuck();
+  // let imgThreeRandom = randomDuck();
 
-  while (imgOneRandom === imgTwoRandom || imgTwoRandom === imgThreeRandom || imgOneRandom === imgThreeRandom) {
-    imgOneRandom = randomDuck();
-    imgTwoRandom = randomDuck();
-    imgThreeRandom = randomDuck();
+//   while (imgOneRandom === imgTwoRandom || imgTwoRandom === imgThreeRandom || imgOneRandom === imgThreeRandom) {
+//     imgOneRandom = randomDuck();
+//     imgTwoRandom = randomDuck();
+//     imgThreeRandom = randomDuck();
+//   }
+
+  while (indexArray.length < 6){
+    let randomNum =  randomDuck();
+    if(!indexArray.includes(randomNum)){
+      indexArray.push(randomNum);
+    }
   }
+
+  let imgOneRandom = indexArray.shift();
+  let imgTwoRandom = indexArray.shift();
+  let imgThreeRandom = indexArray.shift();
 
   imgOne.src = productArray[imgOneRandom].imagePath;
   imgTwo.src= productArray[imgTwoRandom].imagePath;
@@ -52,7 +65,6 @@ function renderImages(){
   productArray[imgTwoRandom].views++;
   productArray[imgThreeRandom].views++;
 }
-
 //Event Handler
 
 function handleShowResult(event){
