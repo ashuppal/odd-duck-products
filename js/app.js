@@ -113,3 +113,4 @@ renderImages();
 
 imageContainer.addEventListener('click',handleImageClick);
 resultBtn.addEventListener('click', handleShowResult);
+
