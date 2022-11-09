@@ -67,6 +67,7 @@ function renderImages(){
 }
 //Event Handler
 
+
 function handleShowResult(event){
 
   if(voteCount === 0){
