@@ -12,25 +12,46 @@ let imgTwo = document.getElementById('img-two');
 let imgThree = document.getElementById('img-three');
 
 let resultBtn = document.getElementById('show-result-btn');
+
 let resultContainer = document.getElementById('result-container');
+
+//Canvas DOM reference
+let chartContext = document.getElementById('my-chart').getContext('2d');
+
+//Chart on
+
 
 
 //Helper/ Utility Functions
+
+let indexArray = [];
 
 function randomDuck(){
   return Math.floor(Math.random() * productArray.length);
 }
 
 function renderImages(){
-  let imgOneRandom = randomDuck();
-  let imgTwoRandom = randomDuck();
-  let imgThreeRandom = randomDuck();
+  // let imgOneRandom = randomDuck();
+  // let imgTwoRandom = randomDuck();
+  // let imgThreeRandom = randomDuck();
 
-  while (imgOneRandom === imgTwoRandom || imgTwoRandom === imgThreeRandom || imgOneRandom === imgThreeRandom) {
-    imgOneRandom = randomDuck();
-    imgTwoRandom = randomDuck();
-    imgThreeRandom = randomDuck();
+//   while (imgOneRandom === imgTwoRandom || imgTwoRandom === imgThreeRandom || imgOneRandom === imgThreeRandom) {
+//     imgOneRandom = randomDuck();
+//     imgTwoRandom = randomDuck();
+//     imgThreeRandom = randomDuck();
+//   }
+
+  while (indexArray.length < 6){
+    let randomNum =  randomDuck();
+    if(!indexArray.includes(randomNum)){
+      indexArray.push(randomNum);
+    }
   }
+
+  
+  let imgOneRandom = indexArray.shift();
+  let imgTwoRandom = indexArray.shift();
+  let imgThreeRandom = indexArray.shift();
 
   imgOne.src = productArray[imgOneRandom].imagePath;
   imgTwo.src= productArray[imgTwoRandom].imagePath;
@@ -45,21 +66,47 @@ function renderImages(){
   productArray[imgTwoRandom].views++;
   productArray[imgThreeRandom].views++;
 }
-
 //Event Handler
+
 
 function handleShowResult(event){
 
   if(voteCount === 0){
-    for(let i =0; i<productArray.length;i++){
-      let liElem = document.createElement('li');
-      liElem.textContent = `${productArray[i].name} was viewd: ${productArray[i].views} time(s) and clicked: ${productArray[i].click}`;
-      resultContainer.appendChild(liElem);
-    }
-    resultBtn.removeEventListener('click',handleShowResult);
-  }
+
+    let productName = [];
+    let productViews = [];
+    let productClicks = [];
+
+for(let i=0; i<productArray.length;i++){
+  productName.push(productArray[i].name);
+  productViews.push(productArray[i].views);
+  productClicks.push(productArray[i].click);
 
 }
+    let chartConfig = {
+      type: 'bar',
+      data: {
+        labels: productName,
+        datasets: [{
+          label: "# of views",
+          data: productViews,
+          backgroundColor: 'red',
+        },{
+          label: "# of clicks",
+          data: productClicks,
+          backgroundColor: 'blue',
+
+        }],
+       
+    
+    },
+      options: {},
+    };
+    let myChart = new Chart(chartContext, chartConfig);
+    resultBtn.removeEventListener('click',handleShowResult);
+    }
+   
+  }
 
 function handleImageClick(event){
 
@@ -75,6 +122,15 @@ function handleImageClick(event){
   
   if(voteCount === 0){
     imageContainer.removeEventListener('click', handleImageClick);
+
+    //Local storage starts here
+    //step 1
+
+    let stringifiedDucks = JSON.stringify(productArray);
+
+    //step 2
+    localStorage.setItem('myProduct', stringifiedDucks);
+   
   }
 }
 
@@ -86,6 +142,18 @@ function Product(name,fileExt = 'jpg'){
   this.click = 0;
   this.views = 0;
 }
+
+//step 3 - pull data out of Local storage
+
+let retrievedDucks = localStorage.getItem('myProduct');
+
+console.log(`retrievedDucks =>>>` , retrievedDucks);
+
+//step 4 - parse data into code 
+
+let parsedDucks = JSON.parse(retrievedDucks);
+
+console.log(`parsedDucks =>> `, parsedDucks);
 
 let sweep = new Product('sweep', 'png');
 let bag = new Product('bag');
@@ -110,6 +178,8 @@ let wineGlass = new Product('wine-glass');
 productArray.push(sweep,bag,banana,bathroom,boots,breakfast,bubblegum,chair,cthulhu,dogDuck,dragon,pen,petSweep,scissors,shark,tauntaun,unicorn,waterCan,wineGlass);
 
 renderImages();
+
+
 
 imageContainer.addEventListener('click',handleImageClick);
 resultBtn.addEventListener('click', handleShowResult);
